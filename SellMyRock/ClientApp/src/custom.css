@@ -1,0 +1,62 @@
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+code {
+  color: #E01A76;
+}
+
+.navLogo {
+    width: 125px;
+    margin-left: 15px;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.quoteForm {
+    border: 1px solid #ced4da;
+    padding: 25px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.quoteForm > div{
+    padding: 10px;
+    display: inline-block;
+    width: 50%;
+}
+
+.allQuotes {
+    border-width: 5px;
+    border-style: outset;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.quoteTile {
+    text-align: center;
+}
+
+.quoteTile img {
+    width: 115px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+
+.quoteTile ul{
+    border-style: outset;
+    border-radius: 5px;
+    list-style: none;
+    border-width: 3px;
+}
+.quoteTile li {
+    display: inline-block;
+    width: 33%;
+    text-align:left;
+    text-transform:uppercase;
+}
+

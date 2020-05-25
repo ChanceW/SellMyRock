@@ -22,7 +22,6 @@ function buildInfo(quote) {
     let result = [];
     for (let [key, value] of Object.entries(quote)) {
         if (key !== "files") {
-            console.log(`${key}: ${value}`);
             result.push(<li><span><b>{key}: </b></span><span>{value}</span></li>);
         }
     }

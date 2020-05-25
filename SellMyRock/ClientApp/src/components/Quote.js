@@ -1,4 +1,5 @@
 ﻿import React, { useReducer } from 'react';
+import ImageFileInput from '../components/Common/FileInput';
 
 function reducer(state, action) {
     switch (action.type) {
@@ -33,6 +34,7 @@ function Submit(form) {
     });
 }
 
+
 const defaultState = {
     name: "",
     address: "",
@@ -48,6 +50,10 @@ const defaultState = {
 
 export default function Quote() {
     const [state, dispatch] = useReducer(reducer, defaultState);
+    const fileInputChange = (files) => {
+        dispatch({type:'change', prop:'files', val: files});
+    };
+
     return <div>
                 Contact Information
                 <div className="quoteForm">
@@ -98,9 +104,8 @@ export default function Quote() {
                             <option>Yes</option><option>No</option>
                         </select>
                     </div>
-                    <div>
-                        <span>Images</span>
-                        <input className="form-control" onChange={(e) => dispatch({type:'change', prop:'files', val:e.target.files })} type="file" multiple  />
+                    <div style={{'width':'100%'}}>
+                        <ImageFileInput label={'Images'} onChange={fileInputChange} />
                     </div>
                 </div>
         <button className={'btn btn-primary'} onClick={Submit.bind(null, state)}>Submit Quote</button>

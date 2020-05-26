@@ -1,9 +1,18 @@
 ﻿import React, { useReducer } from 'react';
 
+function filesToList(filesObj) {
+    let result = [];
+    for (let [key, value] of Object.entries(filesObj)) {
+        result.push(value);
+    }
+    return result;
+}
+
 function reducer(state, action) {
     switch (action.type) {
         case 'change':
-            state.images = action.val;
+            const images = filesToList(action.val);
+            state.images = images;
             action.formChange(action.val);
             return { images : action.val , ...state };
         default:
@@ -11,37 +20,50 @@ function reducer(state, action) {
     }
 }
 
-function openFileExplore(inputFile) {
-    inputFile.current.click();
-}
-
-function renderImages(images) {
-    var results = [];
-    const style = {
-        display: 'inline',
-        width: '115px',
-        marginRight: '15px'
-    };
-
-    for (let [key, value] of Object.entries(images)) {
-        results.push(<img alt={value.name} src={window.URL.createObjectURL(value)} style={style} />);
-    }
-    return results;
-}
-
 export default function ImageFileInput(props) {
     const [state, dispatch] = useReducer(reducer, {images : []});
     const inputFile = React.createRef();
-    const style = {
-        cursor : "pointer"
+
+    function handleDragDrop(e) {
+        const images = state.images.concat(filesToList(e.dataTransfer.files));
+        dispatch({ type: 'change', val: images, formChange: props.onChange });
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    const dragProps = {
+        onDrop: handleDragDrop,
+        onDragOver: handleDragDrop,
+        onDragEnter: handleDragDrop,
+        onDragLeave: handleDragDrop
     };
 
-    return <div style={style} onClick={openFileExplore.bind(null, inputFile)}>
+    function openFileExplore(inputFile) {
+        inputFile.current.click();
+    }
+
+    function renderImages(images) {
+        const style = {
+            display: 'inline',
+            width: '115px',
+            marginRight: '15px'
+        };
+
+        return images.map((img, idx) => {
+            return <img key={idx} alt={img.name} src={window.URL.createObjectURL(img)} style={style} />;
+        });
+    }
+
+
+    return <div {...dragProps}>
         <span>{props.label} ({state.images.length} Files)</span>
-        <input ref={inputFile} onChange={(e) => dispatch({ type: 'change', val: e.target.files, formChange : props.onChange })} style={{ 'display': 'none' }} className="form-control" type="file" multiple />
-        <div className='form-control' style={{ 'height': '300px', 'textAlign': 'center' }}>
+        <input ref={inputFile} onChange={(e) => dispatch({ type: 'change', val: state.images.concat(filesToList(e.target.files)), formChange : props.onChange })} style={{ 'display': 'none' }} className="form-control" type="file" multiple />
+        <div className='form-control' style={{ 'minHeight': '200px', 'height': 'auto', 'textAlign': 'center' }}>
+            <div style={{ 'textAlign': 'right', 'marginBottom':'15px' }}>
+                <button style={{ marginRight: '15px' }} onClick={openFileExplore.bind(null, inputFile)} className='btn btn-outline-success'>Upload</button>
+                <button className='btn btn-outline-danger' onClick={(e) => { e.stopPropagation(); dispatch({ type: 'change', val: [], formChange: props.onChange }); }}>Clear All</button>
+            </div>
             {renderImages(state.images)}
-            <div style={{ 'marginTop': '25px' }}><button className='btn btn-outline-success'>Upload</button></div>
         </div>
     </div>;
 }

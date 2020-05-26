@@ -56,6 +56,7 @@ namespace SellMyRock.Controllers
                             ReportNumber = rdr["ReportNumber"].ToString(),
                             Certified = rdr["Certified"].ToString(),
                             Files = rdr["Files"].ToString().Split(",").ToList(),
+                            CreatedDate = rdr["CreatedDate"].ToString()
                         };
                         results.Add(quote);
                     }
@@ -123,6 +124,7 @@ namespace SellMyRock.Controllers
             public string ReportNumber { get; set; }
             public string Certified { get; set; }
             public List<string> Files { get; set; }
+            public string CreatedDate { get; set; }
         }
     }
 }
